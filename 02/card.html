@@ -21,24 +21,38 @@
     <script>
         const rNums = [];
         function reverse(obj){
+            if(obj.getAttribute('data-open')==2){
+                return;
+            }
             let openImgs = document.querySelectorAll('img[data-open="1"]');
             if(openImgs.length===2){
                 return;
             }
-            console.log(openImgs.length);
             const num = obj.getAttribute('data-num');
             const imgPath = `/img/cards/${num}.png`;
+            obj.setAttribute('data-open','1');
             if(openImgs.length===1){
-                setTimeout(function(){
+                if(openImgs[0].getAttribute('data-num')%13===num%13){
                     openImgs = document.querySelectorAll('img[data-open="1"]');
                     for(let i=0;i<openImgs.length;i++){
-                        openImgs[i].src = '/img/cards/back.png';
-                        openImgs[i].setAttribute('data-open','0');
+                        openImgs[i].setAttribute('data-open','2');
                     }
-                },1000)
+                }else{
+                    setTimeout(function(){
+                        openImgs = document.querySelectorAll('img[data-open="1"]');
+                        for(let i=0;i<openImgs.length;i++){
+                            openImgs[i].src = '/img/cards/back.png';
+                            openImgs[i].setAttribute('data-open','0');
+                        }
+                    },1000)
+                }
+                
             }
             obj.src = imgPath;
-            obj.setAttribute('data-open','1');
+            const clearImgs = document.querySelectorAll('img[data-open="2"]');
+            if (clearImgs.length===52){
+                alert('클리어!!');
+            }
         }
         function startCard(){
             let cnt = 0;
