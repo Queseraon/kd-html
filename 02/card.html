@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{
+            padding:1;
+            margin:1;
+            width:80px;
+            height:100px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="startCard()">시작</button>
+    <div id="table">
+
+    </div>
+    <script>
+        const rNums = [];
+        function reverse(obj){
+            let openImgs = document.querySelectorAll('img[data-open="1"]');
+            if(openImgs.length===2){
+                return;
+            }
+            console.log(openImgs.length);
+            const num = obj.getAttribute('data-num');
+            const imgPath = `/img/cards/${num}.png`;
+            if(openImgs.length===1){
+                setTimeout(function(){
+                    openImgs = document.querySelectorAll('img[data-open="1"]');
+                    for(let i=0;i<openImgs.length;i++){
+                        openImgs[i].src = '/img/cards/back.png';
+                        openImgs[i].setAttribute('data-open','0');
+                    }
+                },1000)
+            }
+            obj.src = imgPath;
+            obj.setAttribute('data-open','1');
+        }
+        function startCard(){
+            let cnt = 0;
+            let html = "<table>";
+            while(rNums.length<52){
+                const rNum = Math.floor(Math.random()*52);
+                if (!rNums.includes(rNum)){
+                    rNums.push(rNum);
+                }
+            }
+            for(let i=0;i<4;i++){
+                html += "<tr>";
+
+                for(let j=0;j<13;j++){
+                    html += `<td><img src="/img/cards/back.png" data-num="${rNums[cnt++]}" `;
+                    html += `onclick="reverse(this)" data-open"0"></td>`
+                }
+                html += "</tr>";
+            }
+            html += "</table>"
+            document.querySelector('#table').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
