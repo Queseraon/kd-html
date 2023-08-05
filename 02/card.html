@@ -10,16 +10,40 @@
             margin:1;
             width:80px;
             height:100px;
+            box-shadow:10px 10px 5px rgb(20, 20, 20);
+        }
+        table{
+            margin:0 auto;
+        }
+        body{
+            background-image:url('/img/paper_background.jpg');
+            background-size:cover;
+        }
+        td{
+            padding:10px;
+        }
+        #clock{
+            color:white;
+            font-size:13pt;
+            font-weight:900;
+            text-shadow:0px -1px black, 0px 1px black, 1px 0px black, -1px 0px black;
         }
     </style>
 </head>
 <body>
     <button onclick="startCard()">시작</button>
+    <div id="clock"></div>  <!--테두리 두께?, 버튼 옆에?-->
     <div id="table">
 
     </div>
     <script>
         const rNums = [];
+        let cnt=0;
+        let time=0;
+        function timer(){
+            time++;
+            document.querySelector('#clock').innerHTML = `경과시간 : ${time}`;
+        }
         function reverse(obj){
             if(obj.getAttribute('data-open')==2){
                 return;
@@ -32,6 +56,7 @@
             const imgPath = `/img/cards/${num}.png`;
             obj.setAttribute('data-open','1');
             if(openImgs.length===1){
+                cnt++;
                 if(openImgs[0].getAttribute('data-num')%13===num%13){
                     openImgs = document.querySelectorAll('img[data-open="1"]');
                     for(let i=0;i<openImgs.length;i++){
@@ -44,26 +69,26 @@
                             openImgs[i].src = '/img/cards/back.png';
                             openImgs[i].setAttribute('data-open','0');
                         }
-                    },1000)
+                    },500)
                 }
                 
             }
             obj.src = imgPath;
             const clearImgs = document.querySelectorAll('img[data-open="2"]');
-            if (clearImgs.length===52){
-                alert('클리어!!');
+            if (clearImgs.length===26){
+                alert(`클리어!! | ${time}초, ${cnt}회`);
             }
         }
         function startCard(){
             let cnt = 0;
             let html = "<table>";
-            while(rNums.length<52){
-                const rNum = Math.floor(Math.random()*52);
+            while(rNums.length<26){
+                const rNum = Math.floor(Math.random()*26);
                 if (!rNums.includes(rNum)){
                     rNums.push(rNum);
                 }
             }
-            for(let i=0;i<4;i++){
+            for(let i=0;i<2;i++){
                 html += "<tr>";
 
                 for(let j=0;j<13;j++){
@@ -74,6 +99,7 @@
             }
             html += "</table>"
             document.querySelector('#table').innerHTML = html;
+            setInterval(timer,1000)
         }
     </script>
 </body>
